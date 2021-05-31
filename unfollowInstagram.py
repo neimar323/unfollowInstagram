@@ -24,8 +24,11 @@ def unfolowAllInsta(link, profileName, emailOrNumber, pwd):
     loginButton = driver.find_element_by_xpath('''// *[ @ id = "loginbutton"]''')
     loginButton.click()
     sleep(7)
-    notNow = driver.find_element_by_xpath('''/html/body/div[4]/div/div/div/div[3]/button[2]''')
-    notNow.click()
+    try:
+        notNow = driver.find_element_by_xpath('''/html/body/div[4]/div/div/div/div[3]/button[2]''')
+        notNow.click()
+    except:
+        pass
 
     driver.get(profileName)
     sleep(6)
@@ -39,9 +42,9 @@ def unfolowAllInsta(link, profileName, emailOrNumber, pwd):
             buttons[i].click()
         except:
             pass
-        unfollowBtns = driver.find_elements_by_xpath("//*[contains(text(), 'Deixar de seguir')]")
         try:
-            unfollowBtns[1].click()
+            unfollowBtns = driver.find_elements_by_xpath("/html/body/div[6]/div/div/div/div[3]/button[1]")
+            unfollowBtns[0].click()
             sleep(1)
         except:
             pass

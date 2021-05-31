@@ -30,27 +30,38 @@ def unfolowAllInsta(link, profileName, emailOrNumber, pwd):
     except:
         pass
 
-    driver.get(profileName)
-    sleep(6)
-    following = driver.find_element_by_xpath('''//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a''')
-    following.click()
-    sleep(4)
-    buttons = driver.find_elements_by_xpath("//*[contains(text(), 'Seguindo')]")
-    i = 0
-    while len(buttons) > 1:
-        try:
-            buttons[i].click()
-        except:
-            pass
-        try:
-            unfollowBtns = driver.find_elements_by_xpath("/html/body/div[6]/div/div/div/div[3]/button[1]")
-            unfollowBtns[0].click()
-            sleep(1)
-        except:
-            pass
+    while True:
+        driver.get(profileName)
+        sleep(4)
+        following = driver.find_element_by_xpath('''//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a''')
+        following.click()
+        sleep(4)
+        people = driver.find_elements_by_xpath("//span[@class='Jv7Aj mArmR MqpiF  ']")
 
-        i = i + 1
-        #do again
-        if i > 5:
-            i = 0
-            buttons = driver.find_elements_by_xpath("//*[contains(text(), 'Seguindo')]")
+        if len(people) <= 0:
+            break
+
+        followingLinks = []
+        for p in people:
+            followingLinks.append('https://www.instagram.com/' + p.text)
+
+        for link in followingLinks:
+            try:
+                driver.get(link)
+                driver.find_element_by_xpath(
+                    '''//*[@id="react-root"]/section/main/div/header/section/div[2]''').get_attribute('innerHTML')
+                sleep(1)
+                try:
+                    btnFriend = driver.find_element_by_xpath("""//*[@id="react-root"]/section/main/div/header/section/div[2]/div/div[2]/div/span/span[1]/button/div/span""")
+                except:
+                    btnFriend = driver.find_element_by_xpath(
+                        """//*[@id="react-root"]/section/main/div/header/section/div[1]/div[1]/div/div[2]/div/span/span[1]/button""")
+
+                btnFriend.click()
+
+                unfollowBtn = driver.find_element_by_xpath("/html/body/div[5]/div/div/div/div[3]/button[1]")
+                unfollowBtn.click()
+            except:
+                pass
+
+
